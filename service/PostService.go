@@ -11,8 +11,8 @@ import (
 type PostInterFace interface {
 	CreatePost(post *handler.Post) (uuid.UUID, error)
 	DeletePost(postID uuid.UUID, userID int) error
-	ListAllPosts(ctx context.Context) ([]*handler.Post, error)
-	LiveNewsFeedQuery(ctx context.Context, userID int) ([]*handler.Post, error)
+	ListAllPosts(ctx context.Context, userID int) ([]*handler.Post, error)
+	LiveNewsFeedQuery(ctx context.Context) ([]*handler.Post, error)
 }
 
 type postService struct {
@@ -40,16 +40,16 @@ func (p *postService) DeletePost(postID uuid.UUID, userID int) error {
 	return nil
 }
 
-func (p *postService) ListAllPosts(ctx context.Context) ([]*handler.Post, error) {
-	posts, err := p.store.ListAllPosts(ctx)
+func (p *postService) ListAllPosts(ctx context.Context, userID int) ([]*handler.Post, error) {
+	posts, err := p.store.ListAllPosts(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
 	return posts, nil
 }
 
-func (p *postService) LiveNewsFeedQuery(ctx context.Context, userID int) ([]*handler.Post, error) {
-	posts, err := p.store.LiveNewsFeedQuery(ctx, userID)
+func (p *postService) LiveNewsFeedQuery(ctx context.Context) ([]*handler.Post, error) {
+	posts, err := p.store.LiveNewsFeedQuery(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -19,8 +19,8 @@ func router(h *Handler) *mux.Router {
 	r := newRouter()
 	r.HandleFunc("/v1/user/post", h.forumHandler.CreatePost).Methods(http.MethodPost)
 	r.HandleFunc("/v1/user/post", h.forumHandler.DeletePost).Methods(http.MethodDelete)
-	r.HandleFunc("/v1/user/all/post", h.forumHandler.ListAllPosts).Methods(http.MethodGet)
-	r.HandleFunc("/v1/user/live/feed/{user_id}", h.forumHandler.LiveNewsFeedQuery).Methods(http.MethodGet)
+	r.HandleFunc("/v1/user/all/post/{user_id}", h.forumHandler.ListAllPosts).Methods(http.MethodGet)
+	r.HandleFunc("/v1/user/live/feed", h.forumHandler.LiveNewsFeedQuery).Methods(http.MethodGet)
 
 	return r
 }

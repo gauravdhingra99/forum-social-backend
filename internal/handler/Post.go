@@ -12,10 +12,11 @@ import (
 )
 
 type Post struct {
-	ID        uuid.UUID `db:"id"`
-	Content   string    `db:"content"`
-	AuthorID  int       `db:"author_id"`
-	Anonymous bool      `db:"anonymous"`
+	ID         uuid.UUID `db:"id"`
+	Content    string    `db:"content"`
+	AuthorID   int       `db:"author_id"`
+	AuthorName string    `db:"author_name"`
+	Anonymous  bool      `db:"anonymous"`
 }
 
 type Response struct {
@@ -66,7 +67,8 @@ func (forumHandler *ForumHandler) DeletePost(writer http.ResponseWriter, request
 
 func (forumHandler *ForumHandler) ListAllPosts(writer http.ResponseWriter, request *http.Request) {
 	ctx := request.Context()
-	posts, err := forumHandler.postService.ListAllPosts(ctx)
+	userID, _ := strconv.Atoi(mux.Vars(request)["user_id"])
+	posts, err := forumHandler.postService.ListAllPosts(ctx, userID)
 	if err != nil {
 		resp := models.NewErrorResponse(models.ErrInternalServerError, "failed to publish message", "internal server error")
 		resp.Write(writer, http.StatusInternalServerError)
@@ -80,8 +82,7 @@ func (forumHandler *ForumHandler) ListAllPosts(writer http.ResponseWriter, reque
 
 func (forumHandler *ForumHandler) LiveNewsFeedQuery(writer http.ResponseWriter, request *http.Request) {
 	ctx := request.Context()
-	userID, _ := strconv.Atoi(mux.Vars(request)["user_id"])
-	posts, err := forumHandler.postService.LiveNewsFeedQuery(ctx, userID)
+	posts, err := forumHandler.postService.LiveNewsFeedQuery(ctx)
 	if err != nil {
 		resp := models.NewErrorResponse(models.ErrInternalServerError, "failed to publish message", "internal server error")
 		resp.Write(writer, http.StatusInternalServerError)
